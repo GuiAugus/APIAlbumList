@@ -30,3 +30,4 @@ C:\Users\Augus\OneDrive\Desktop\Projects\APIAlbumList\obj\Debug\net8.0\refint\AP
 C:\Users\Augus\OneDrive\Desktop\Projects\APIAlbumList\obj\Debug\net8.0\APIAlbumList.pdb
 C:\Users\Augus\OneDrive\Desktop\Projects\APIAlbumList\obj\Debug\net8.0\APIAlbumList.genruntimeconfig.cache
 C:\Users\Augus\OneDrive\Desktop\Projects\APIAlbumList\obj\Debug\net8.0\ref\APIAlbumList.dll
+C:\Users\Augus\OneDrive\Desktop\Projects\APIAlbumList\obj\Debug\net8.0\APIAlbumList.sourcelink.json
