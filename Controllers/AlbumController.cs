@@ -27,4 +27,39 @@ public class AlbumController : ControllerBase
         
         return album;
     }
+
+    [HttpPost]
+    public IActionResult Create(Album album)
+    {
+        AlbumService.Add(album);
+        return CreatedAtAction(nameof(Get), new { id = album.Id}, album);
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, Album album)
+    {
+        if (id != album.Id)
+            return BadRequest();
+
+        var existingAlbum = AlbumService.Get(id);
+        if(existingAlbum is null)
+            return NotFound();
+
+        AlbumService.Update(album);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        var album = AlbumService.Get(id);
+
+        if (album is null)
+            return NotFound();
+
+        AlbumService.Delete(id);
+
+        return NoContent();
+    }
 }
