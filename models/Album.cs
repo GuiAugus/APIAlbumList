@@ -7,6 +7,6 @@ public class Album
     public string? ArtistName { get; set;}
     public string? Name { get; set;}
 
-    public DateOnly Release { get; set;}
+    public int YearRelease { get; set;}
 
 }

@@ -10,8 +10,8 @@ public static class AlbumService
     {
         Albums = new List<Album>
         {
-            new Album { Id = 1, ArtistName = "Racionais MC", Name = "Sobrevivendo no Inferno", Release = new DateOnly(1997, 12, 20)},
-            new Album { Id = 2, ArtistName = "BK", Name = "Castelos e Ruinas", Release = new DateOnly(2016, 03, 21)}
+            new Album { Id = 1, ArtistName = "Racionais MC", Name = "Sobrevivendo no Inferno", YearRelease = 1997},
+            new Album { Id = 2, ArtistName = "BK", Name = "Castelos e Ruinas", YearRelease = 2016}
         };
     }
 
