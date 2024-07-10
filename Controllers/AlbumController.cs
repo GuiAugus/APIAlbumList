@@ -2,6 +2,7 @@ using System.Security.Cryptography.X509Certificates;
 using APIAlbumList.Models;
 using APIAlbumList.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APIAlbumList.Controllers;
 
@@ -9,57 +10,84 @@ namespace APIAlbumList.Controllers;
 [Route("[controller]")]
 public class AlbumController : ControllerBase
 {
-    public AlbumController()
+    private readonly AlbumDb _context;
+    public AlbumController(AlbumDb context)
     {
-    }
-
-    [HttpGet]
-    public ActionResult<List<Album>> GetAll() =>
-        AlbumService.GetAll();
-
-    [HttpGet("{id}")]
-    public ActionResult<Album> Get(int id)
-    {
-        var album = AlbumService.Get(id);
-
-        if(album == null)
-            return NotFound();
-        
-        return album;
+        _context = context;
     }
 
     [HttpPost]
-    public IActionResult Create(Album album)
+    public async Task<ActionResult<Album>> PostAlbum(Album album)
     {
-        AlbumService.Add(album);
-        return CreatedAtAction(nameof(Get), new { id = album.Id}, album);
+        _context.Albums.Add(album);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction("GetAlbum", new {id = album.Id}, album);
     }
 
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, Album album)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Album>>> GetAlbums()
+    {
+        return await _context.Albums.ToListAsync();
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Album>> GetAlbum(int id)
+    {
+        var album = await _context.Albums.FindAsync(id);
+
+        if (album == null)
+        {
+            return NotFound();
+        }        
+        return album;
+    }
+
+    [HttpPut("id")]
+    public async Task<IActionResult> PutAlbum(int id, Album album)
     {
         if (id != album.Id)
+        {
             return BadRequest();
+        }
 
-        var existingAlbum = AlbumService.Get(id);
-        if(existingAlbum is null)
-            return NotFound();
+        _context.Entry(album).State = EntityState.Modified;
 
-        AlbumService.Update(album);
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!AlbumExists(id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+        return NoContent();        
+    }
 
-        return NoContent();
+    private bool AlbumExists(int id)
+    {
+        return _context.Albums.Any(e => e.Id == id);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> DeleteAlbum(int id)
     {
-        var album = AlbumService.Get(id);
-
-        if (album is null)
+        var album = await _context.Albums.FindAsync(id);
+        if (album == null)
+        {
             return NotFound();
-
-        AlbumService.Delete(id);
+        }
+        _context.Albums.Remove(album);
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
+
 }

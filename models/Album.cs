@@ -10,7 +10,7 @@ public class Album
     public int YearRelease { get; set;}
 }
 
-class AlbumDb : DbContext
+public class AlbumDb : DbContext
 {
     public AlbumDb(DbContextOptions<AlbumDb> options) : base(options) { }
     public DbSet<Album> Albums { get; set;}
